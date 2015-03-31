@@ -13,10 +13,26 @@ class m150329_193545_alter_user_table extends Migration
         $this->addColumn('user', 'user_type_id', 'integer not null default 1');
         $this->alterColumn('user', 'created_at', 'datetime not null');
         $this->alterColumn('user', 'updated_at', 'datetime not null');
+
+        $this->createIndex('username', 'user', 'username', true);
+        $this->createIndex('email', 'user', 'email', true);
+        $this->createIndex('role_id', 'user', 'role_id');
+        $this->createIndex('status_id', 'user', 'status_id');
+        $this->createIndex('user_type_id', 'user', 'user_type_id');
+        $this->createIndex('created_at', 'user', 'created_at');
+        $this->createIndex('updated_at', 'user', 'updated_at');
     }
 
     public function down()
     {
+        $this->dropIndex('username', 'user');
+        $this->dropIndex('email', 'user');
+        $this->dropIndex('role_id', 'user');
+        $this->dropIndex('status_id', 'user');
+        $this->dropIndex('user_type_id', 'user');
+        $this->dropIndex('created_at', 'user');
+        $this->dropIndex('updated_at', 'user');
+
         $this->renameColumn('user', 'status_id', 'status');
         $this->alterColumn('user', 'status', 'smallint not null default 10');
         $this->dropColumn('user', 'role_id');
