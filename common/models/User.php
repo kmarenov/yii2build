@@ -8,6 +8,8 @@ use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\web\IdentityInterface;
 use yii\helpers\Security;
+use yii\helpers\ArrayHelper;
+use backend\models\Role;
 
 /**
  * User model
@@ -65,6 +67,7 @@ class User extends ActiveRecord implements IdentityInterface
 
             ['status_id', 'default', 'value' => self::STATUS_ACTIVE],
             ['role_id', 'default', 'value' => 1],
+            [['role_id'],'in', 'range'=>array_keys($this->getRoleList())],
             ['user_type_id', 'default', 'value' => 1],
 
             ['username', 'filter', 'filter' => 'trim'],
@@ -237,5 +240,32 @@ class User extends ActiveRecord implements IdentityInterface
     public function getProfile()
     {
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * get role relationship
+     *
+     */
+    public function getRole()
+    {
+        return $this->hasOne(Role::className(), ['id' => 'role_id']);
+    }
+
+    /**
+     * get role name
+     *
+     */
+    public function getRoleName()
+    {
+        return $this->role ? $this->role->role_name : '- no role -';
+    }
+
+    /**
+     * get list of roles for dropdown
+     */
+    public static function getRoleList()
+    {
+        $droptions = Role::find()->asArray()->all();
+        return ArrayHelper::map($droptions, 'id', 'role_name');
     }
 }
