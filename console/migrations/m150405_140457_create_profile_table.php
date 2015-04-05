@@ -33,12 +33,12 @@ class m150405_140457_create_profile_table extends Migration
         $this->createIndex('updated_at', '{{%profile}}', 'updated_at');
 
         $this->addForeignKey(
-            'profile_user_id', "{{%profile}}",
+            'profile_user_id', '{{%profile}}',
             'user_id', '{{%user}}', 'id'
         );
 
         $this->addForeignKey(
-            'profile_gender_id', "{{%profile}}",
+            'profile_gender_id', '{{%profile}}',
             'gender_id', '{{%gender}}', 'id'
         );
 
@@ -46,8 +46,8 @@ class m150405_140457_create_profile_table extends Migration
 
     public function down()
     {
-        $this->dropForeignKey("profile_user_id", "{{%profile}}");
-        $this->dropForeignKey("profile_gender_id", "{{%profile}}");
+        $this->dropForeignKey('profile_user_id', '{{%profile}}');
+        $this->dropForeignKey('profile_gender_id', '{{%profile}}');
 
         $this->dropIndex('user_id', '{{%profile}}');
         $this->dropIndex('first_name', '{{%profile}}');
