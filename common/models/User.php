@@ -9,9 +9,12 @@ use yii\db\Expression;
 use yii\web\IdentityInterface;
 use yii\helpers\Security;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use yii\helpers\Html;
 use backend\models\Role;
 use backend\models\Status;
 use backend\models\UserType;
+use frontend\models\Profile;
 
 /**
  * User model
@@ -92,7 +95,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            /* Your other attribute labels */
+            'roleName' => Yii::t('app', 'Role'),
+            'statusName' => Yii::t('app', 'Status'),
+            'profileId' => Yii::t('app', 'Profile'),
+            'profileLink' => Yii::t('app', 'Profile'),
+            'userLink' => Yii::t('app', 'User'),
+            'username' => Yii::t('app', 'User'),
+            'userTypeName' => Yii::t('app', 'User Type'),
+            'userTypeId' => Yii::t('app', 'User Type'),
+            'userIdLink' => Yii::t('app', 'ID'),
         ];
     }
 
@@ -330,5 +341,47 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUserTypeId()
     {
         return $this->userType ? $this->userType->id : 'none';
+    }
+
+    /**
+     * @getProfileId
+     *
+     */
+    public function getProfileId()
+    {
+        return $this->profile ? $this->profile->id : 'none';
+    }
+
+    /**
+     * @getProfileLink
+     *
+     */
+    public function getProfileLink()
+    {
+        $url = Url::to(['profile/view', 'id'=>$this->profileId]);
+        $options = [];
+        return Html::a($this->profile ? 'profile' : 'none', $url, $options);
+    }
+
+    /**
+     * get user id Link
+     *
+     */
+    public function getUserIdLink()
+    {
+        $url = Url::to(['user/update', 'id'=>$this->id]);
+        $options = [];
+        return Html::a($this->id, $url, $options);
+    }
+
+    /**
+     * @getUserLink
+     *
+     */
+    public function getUserLink()
+    {
+        $url = Url::to(['user/view', 'id'=>$this->id]);
+        $options = [];
+        return Html::a($this->username, $url, $options);
     }
 }
